@@ -7,3 +7,12 @@ void printMatrix(const std::vector<std::vector<T>>& matrix) {
         std::cout << std::endl;
     }
 }
+
+
+template<typename T>
+void printVector(const std::vector<T>& vec) {
+    for (const auto& element : vec) {
+        std::cout << element << " ";
+    }
+    std::cout << std::endl;
+}
