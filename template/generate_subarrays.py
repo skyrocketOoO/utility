@@ -1,16 +1,6 @@
 from typing import List
 
 def generate_substrings(s: str, k: int) -> List[str]:
-    """
-    Generate all substrings of a string s with length k.
-
-    Args:
-        s: The string.
-        k: The length of the substrings.
-
-    Returns:
-        A list of all substrings.
-    """
     if k == 0:
         return [""]
     else:
@@ -21,16 +11,6 @@ def generate_substrings(s: str, k: int) -> List[str]:
 
 
 def generate_subsequences(s: str, k: int) -> List[str]:
-    """
-    Generate all subsequences of a string s with length k.
-
-    Args:
-        s: The string.
-        k: The length of the subsequences.
-
-    Returns:
-        A list of all subsequences.
-    """
     if k == 0:
         return [""]
     else:
