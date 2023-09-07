@@ -24,3 +24,4 @@ if __name__ == '__main__':
     s = "abc"
     k = 2
     print(generate_subsequences(s, k))
+    
