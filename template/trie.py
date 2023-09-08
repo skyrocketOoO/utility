@@ -5,34 +5,34 @@ class Trie:
             self.insert(word)
             
     def insert(self, word):
-        cur = self.root
+        current = self.root
         for c in word:
-            if c not in cur:
-                cur[c] = {"length": 0}
-            cur["length"] += 1
-            cur = cur[c]
-        cur["length"] += 1
-        cur["end"] = True
+            if c not in current:
+                current[c] = {"length": 0}
+            current["length"] += 1
+            current = current[c]
+        current["length"] += 1
+        current["?"] = True
 
     def remove(self, word):
-        cur = self.root
-        cur["length"] -= 1
+        current = self.root
+        current["length"] -= 1
         for i, c in enumerate(word):
-            if c in cur:
-                cur[c]["length"] -= 1
-                if cur[c]["length"] < 1:
-                    del cur[c]
+            if c in current:
+                current[c]["length"] -= 1
+                if current[c]["length"] < 1:
+                    del current[c]
                     break
                 else:
-                    cur = cur[c]
-        if i == len(word) - 1 and "end" in cur:
-            del cur["end"]
+                    current = current[c]
+        if i == len(word) - 1 and "?" in current:
+            current.pop("?")
 
-    # 2 represent containes, 1 represent prefix, 0 represent False
+    # return 2 if exist or 1 if prefix, 0 if not found
     def contains(self, word):
-        cur = self.root
+        current = self.root
         for c in word:
-            if c not in cur:
+            if c not in current:
                 return 0
-            cur = cur[c]
-        return 2 if "end" in cur else 1
+            current = current[c]
+        return 2 if "?" in current else 1

@@ -1,13 +1,6 @@
 class UnionFindWithRank:
-    def __init__(self, elements):
+    def __init__(self):
         self.parents = {}  # Initialize a dictionary to store parents
-        self.ranks = {}    # Initialize a dictionary to store ranks
-        self.init_ranks(elements)
-
-    # Initialize ranks for each element
-    def init_ranks(self, elements):
-        for ele in elements:
-            self.ranks[ele] = 0
 
     # Given an element, find the root of the group to which this element belongs.
     def find(self, x):
@@ -21,18 +14,35 @@ class UnionFindWithRank:
         return self.parents[x]
 
     # Given two elements x and y, merge the groups to which they belong.
-    def union(self, x, y):
+    def union(self, x, y, ranker):
         rootX = self.find(x)
         rootY = self.find(y)
         # Set the root with lower rank as the parent
-        if self.ranks[rootX] < self.ranks[rootY]:
+        isLess = ranker.less(rootX, rootY)
+        if isLess:
             self.parents[rootX] = rootY
-        elif self.ranks[rootX] > self.ranks[rootY]:
-            self.parents[rootY] = rootX
         else:
-            # If ranks are equal, choose one as the parent and increment its rank
             self.parents[rootY] = rootX
-            self.ranks[rootX] += 1
+    
+class RankDirectlyCompare:
+    def less(self, x, y):
+        return x < y
+    
+class RankGroupSize:
+    def __init__(self):
+        self.sizes = {}
+    
+    def less(self, x, y):
+        if x not in self.sizes:
+            self.sizes[x] = 1
+        if y not in self.sizes:
+            self.sizes[y] = 1
+        if self.sizes[x] <= self.sizes[y]:
+            self.sizes[y] += 1
+            return True
+        self.sizes[x] += 1
+        return False
+
 
 if __name__ == "__main__":
     # Example usage:
