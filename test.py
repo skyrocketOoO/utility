@@ -1,40 +1,54 @@
-s = "abcd"
-t = "cdab"
+class UnionFindWithRank:
+    def __init__(self):
+        self.parents = {}  # Initialize a dictionary to store parents
 
+    # Given an element, find the root of the group to which this element belongs.
+    def find(self, x):
+        # This may be the first time we see x, so set itself as the root.
+        if x not in self.parents:
+            self.parents[x] = x
+        # If x != parents[x], we use the find function again on x's parent parents[x]
+        # until we find the root and set it as the parent (value) of x in parents.
+        if x != self.parents[x]:
+            self.parents[x] = self.find(self.parents[x])
+        return self.parents[x]
 
-def test(s, t):
-    for i in range(len(s)):
-        if  s[i:] + s[:i]== t:
-            return i
-
-class Solution:
-    def numberOfWays(self, s: str, t: str, k: int) -> int:
-        offsets = self.offset(s, t)
-        n = len(s)
-        self.ans = 0
-        self.bk(0, offsets, n, 0, k)
-        print(self.ans)
+    # Given two elements x and y, merge the groups to which they belong.
+    def union(self, x, y, ranker):
+        rootX = self.find(x)
+        rootY = self.find(y)
+        # Set the root with lower rank as the parent
+        isLess = ranker.less(rootX, rootY)
+        if isLess:
+            self.parents[rootX] = rootY
+        else:
+            self.parents[rootY] = rootX
     
+class RankDirectlyCompare:
+    def less(self, x, y):
+        return x < y
+    
+class RankGroupSize:
+    def __init__(self):
+        self.sizes = {}
+    
+    def less(self, x, y):
+        if x not in self.sizes:
+            self.sizes[x] = 1
+        if y not in self.sizes:
+            self.sizes[y] = 1
+        if self.sizes[x] <= self.sizes[y]:
+            self.sizes[y] += 1
+            return True
+        self.sizes[x] += 1
+        return False
+        
+if __name__ == "__main__":
+    # Example usage:
+    rank = Rank()
+    uf = UnionFindWithRank()
+    uf.union('a', 'b', rank)
 
-    def bk(self, cur, offset, n, step, k):
-        if step == k:
-            if cur % n in offset:
-                self.ans = (self.ans + 1) % 1000000007
-            return
-        for i in range(1, n):
-            self.bk(cur + i, offset, n, step+1, k)
+    # Find the root of an element
+    print(uf.find('a'))  # Output: 3 (since 1, 2, and 3 are in the same group)
 
-
-    def offset(self, s, t):
-        ofs = set()
-        for i in range(0, len(s)):
-            if s[i:] + s[:i]== t:
-                ofs.add(i)
-        print(ofs)
-        return ofs
-
-so = Solution()
-s = "abcde"
-t = "cdeab"
-for k in range(1, 10):
-    so.numberOfWays(s, t, k)
