@@ -1,54 +1,25 @@
-class UnionFindWithRank:
-    def __init__(self):
-        self.parents = {}  # Initialize a dictionary to store parents
+def find_cyclic_vertices(self, graph: List[List[int]]) -> List[int]:
+    # using dfs
+    def dfs(u, status):
+        # init to unsafe
+        status[u] = 2
 
-    # Given an element, find the root of the group to which this element belongs.
-    def find(self, x):
-        # This may be the first time we see x, so set itself as the root.
-        if x not in self.parents:
-            self.parents[x] = x
-        # If x != parents[x], we use the find function again on x's parent parents[x]
-        # until we find the root and set it as the parent (value) of x in parents.
-        if x != self.parents[x]:
-            self.parents[x] = self.find(self.parents[x])
-        return self.parents[x]
-
-    # Given two elements x and y, merge the groups to which they belong.
-    def union(self, x, y, ranker):
-        rootX = self.find(x)
-        rootY = self.find(y)
-        # Set the root with lower rank as the parent
-        isLess = ranker.less(rootX, rootY)
-        if isLess:
-            self.parents[rootX] = rootY
-        else:
-            self.parents[rootY] = rootX
-    
-class RankDirectlyCompare:
-    def less(self, x, y):
-        return x < y
-    
-class RankGroupSize:
-    def __init__(self):
-        self.sizes = {}
-    
-    def less(self, x, y):
-        if x not in self.sizes:
-            self.sizes[x] = 1
-        if y not in self.sizes:
-            self.sizes[y] = 1
-        if self.sizes[x] <= self.sizes[y]:
-            self.sizes[y] += 1
-            return True
-        self.sizes[x] += 1
-        return False
+        for v in graph[u]:
+            if status[v] == 0: # not visited
+                if dfs(v, status):
+                    return True
+            elif status[v] == 2: # if u has edge to unsafe v, u also unsafe
+                return True
         
-if __name__ == "__main__":
-    # Example usage:
-    rank = Rank()
-    uf = UnionFindWithRank()
-    uf.union('a', 'b', rank)
+        # if all check passed, u is safe
+        status[u] = 1
+        return False
 
-    # Find the root of an element
-    print(uf.find('a'))  # Output: 3 (since 1, 2, and 3 are in the same group)
-
+    n = len(graph)
+    # 0: not visited, 1: status, 2: unsafe
+    status = [0] * n 
+    for u in range(n):
+        if status[u] == 0:
+            dfs(u, status)
+            
+    return [u for u in range(n) if status[u] == 1]
