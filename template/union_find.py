@@ -20,7 +20,12 @@ class UnionFind:
         # Set the root of y(rootY) as the root of the root of x(rootX)
         self.parents[rootX] = rootY
 
-
+    def groups(self, eles):
+        groups = 0
+        for ele in eles:
+            if self.find(ele) == ele:
+                groups += 1
+        return groups
 
 if __name__ == "__main__":
     # Example usage:
