@@ -1,0 +1,14 @@
+[Unit]
+Description=My Project
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/path/to/your/project/start.sh
+WorkingDirectory=/path/to/your/project
+User=your_username
+Group=your_group
+Restart=always
+
+[Install]
+WantedBy=multi-user.target has pros and cons?

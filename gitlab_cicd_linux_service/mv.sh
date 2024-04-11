@@ -1,0 +1,1 @@
+mv service.service /etc/systemd/system/
